@@ -871,12 +871,13 @@ class LedgerBridgeKeyring extends EventEmitter {
 
   _sendMessage(msg, cb) {
     msg.target = 'LEDGER-IFRAME';
+    const targetOrigin = this._getOrigin();
     if (!this.iframeLoaded) {
       this.msgQueue.push(() => {
-        this.iframe?.contentWindow?.postMessage(msg, '*');
+        this.iframe?.contentWindow?.postMessage(msg, targetOrigin);
       });
     } else {
-      this.iframe?.contentWindow?.postMessage(msg, '*');
+      this.iframe?.contentWindow?.postMessage(msg, targetOrigin);
     }
     const eventListener = ({ origin, data }) => {
       if (origin !== this._getOrigin()) {
